@@ -1,6 +1,6 @@
 import { createMemory, toHex } from './util';
 
-export default class RAM {
+export default class RandomAccessMemory {
   private readonly memory: DataView;
 
   constructor(sizeInBytes: number) {
