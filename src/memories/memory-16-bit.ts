@@ -16,4 +16,8 @@ export default class Memory16Bit extends Memory {
   public write(data: number): void {
     this.memory.setUint16(Memory16Bit.START_OFFSET, data);
   }
+
+  public toString(): string {
+    return super.toString().replace('0000:', '');
+  }
 }
