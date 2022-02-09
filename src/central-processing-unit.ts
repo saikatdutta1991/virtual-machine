@@ -1,3 +1,5 @@
+import { RAM_FIRST_ADDRESS } from './constants';
+import { InstructionCode } from './enums/instruction-code';
 import { RegisterIdentifier } from './enums/registers-identifier';
 import Memory16Bit from './memories/memory-16-bit';
 import RandomAccessMemory from './memories/random-access-memory';
@@ -23,6 +25,41 @@ export default class CentralProcessingUnit {
       [RegisterIdentifier.R7]: new Memory16Bit(),
       [RegisterIdentifier.R8]: new Memory16Bit(),
     };
+
+    this.resetProgramCounter();
+  }
+
+  public resetProgramCounter() {
+    this.registers[RegisterIdentifier.PC].write(RAM_FIRST_ADDRESS);
+  }
+
+  public cycle() {
+    const instructioncode = this.fetchInstructionCode();
+
+    switch (instructioncode) {
+      case InstructionCode.MOV:
+        break;
+
+      default:
+        throw new Error(`Invalid instructio code: ${toHex(instructioncode)}`);
+    }
+  }
+
+  private fetchInstructionCode(): InstructionCode {
+    const register = this.getRegister(RegisterIdentifier.PC);
+    const address = register.read();
+    const instructioncode = this.ram.read(address);
+    this.nextAddress();
+    return instructioncode;
+  }
+
+  private getRegister(ri: RegisterIdentifier): Memory16Bit {
+    return this.registers[ri];
+  }
+
+  private nextAddress(byBytes: number = 1): void {
+    const register = this.getRegister(RegisterIdentifier.PC);
+    register.write(register.read() + byBytes);
   }
 
   public debug() {
