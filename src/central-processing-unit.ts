@@ -6,7 +6,7 @@ import { toHex } from './util';
 export default class CentralProcessingUnit {
   private ram: RandomAccessMemory;
 
-  private registers: { [address in RegisterIdentifier]: Memory16Bit };
+  private registers: { [identity in RegisterIdentifier]: Memory16Bit };
 
   constructor(ram: RandomAccessMemory) {
     this.ram = ram;
