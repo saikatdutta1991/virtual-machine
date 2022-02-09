@@ -1,23 +1,22 @@
-import Memory from './memory.abstract';
+import { createMemory, toHex } from '../util';
 
-export default class Memory16Bit extends Memory {
-  private static readonly SIZE_IN_BYTES = 2;
-  private static readonly START_OFFSET = 0;
-  private static HEX_PAD = 4;
+export default class Memory16Bit {
+  protected readonly memory: DataView;
+  protected readonly hexPad: number = 4;
 
   constructor() {
-    super(Memory16Bit.SIZE_IN_BYTES, Memory16Bit.HEX_PAD);
+    this.memory = createMemory(2);
   }
 
   public read(): number {
-    return this.memory.getUint16(Memory16Bit.START_OFFSET);
+    return this.memory.getUint16(0);
   }
 
   public write(data: number): void {
-    this.memory.setUint16(Memory16Bit.START_OFFSET, data);
+    this.memory.setUint16(0, data);
   }
 
   public toString(): string {
-    return super.toString().replace('0000:', '');
+    return toHex(this.read(), this.hexPad);
   }
 }

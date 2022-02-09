@@ -38,6 +38,7 @@ export default class CentralProcessingUnit {
 
     switch (instructioncode) {
       case InstructionCode.MOV:
+          
         break;
 
       default:
