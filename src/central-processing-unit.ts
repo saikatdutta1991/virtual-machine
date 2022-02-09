@@ -38,7 +38,12 @@ export default class CentralProcessingUnit {
 
     switch (instructioncode) {
       case InstructionCode.MOV:
-          
+        const data = this.ram.read2Bytes(this.getNextAddress());
+        this.setNextAddress(2);
+        const register = this.getRegister(this.ram.read(this.getNextAddress()));
+        this.setNextAddress();
+        register.write(data);
+
         break;
 
       default:
@@ -47,20 +52,24 @@ export default class CentralProcessingUnit {
   }
 
   private fetchInstructionCode(): InstructionCode {
-    const register = this.getRegister(RegisterIdentifier.PC);
-    const address = register.read();
-    const instructioncode = this.ram.read(address);
-    this.nextAddress();
+    const nextAddress = this.getNextAddress();
+    const instructioncode = this.ram.read(nextAddress);
+    this.setNextAddress();
     return instructioncode;
+  }
+
+  private getNextAddress(): number {
+    const register = this.getRegister(RegisterIdentifier.PC);
+    return register.read();
+  }
+
+  private setNextAddress(byBytes: number = 1): void {
+    const register = this.getRegister(RegisterIdentifier.PC);
+    register.write(register.read() + byBytes);
   }
 
   private getRegister(ri: RegisterIdentifier): Memory16Bit {
     return this.registers[ri];
-  }
-
-  private nextAddress(byBytes: number = 1): void {
-    const register = this.getRegister(RegisterIdentifier.PC);
-    register.write(register.read() + byBytes);
   }
 
   public debug() {
