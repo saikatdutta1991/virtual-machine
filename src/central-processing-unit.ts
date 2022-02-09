@@ -26,12 +26,19 @@ export default class CentralProcessingUnit {
   }
 
   public debug() {
+    this.debugRam();
+    this.debugRegisters();
+  }
+
+  public debugRam() {
     console.log(`
 RAM
 ---
 ${this.ram.toString()}
 `);
+  }
 
+  public debugRegisters() {
     console.log(`
 Registers
 ---------
