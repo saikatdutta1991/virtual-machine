@@ -36,7 +36,7 @@ ${this.ram.toString()}
 Registers
 ---------
  PC:  ${this.registers[0].toString()}
-ACC: ${this.registers[1].toString()}
+ACC:  ${this.registers[1].toString()}
  R1:  ${this.registers[2].toString()}
  R2:  ${this.registers[3].toString()}
  R3:  ${this.registers[4].toString()}
