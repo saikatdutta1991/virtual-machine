@@ -12,6 +12,10 @@ export default class RandomAccessMemory {
     return this.memory.getUint8(address);
   }
 
+  public read2Bytes(address: number): number {
+    return this.memory.getUint16(address);
+  }
+
   public write(address: number, data: number): void {
     this.memory.setUint8(address, data);
   }
