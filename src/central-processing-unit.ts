@@ -44,6 +44,13 @@ export default class CentralProcessingUnit {
         return;
       }
 
+      case Instructions.MOV_REG_MEM: {
+        const registerValue = this.getRegister(this.fetch8());
+        const memAddress = this.fetch16();
+        this.write16(memAddress, registerValue);
+        return;
+      }
+
       default:
         throw new Error(`Invalid instructio code: ${toHex(opcode)}`);
     }
@@ -61,6 +68,10 @@ export default class CentralProcessingUnit {
     const data = this.ram.read16(address);
     this.setRegister(RegisterIdentifier.IP, address + 2);
     return data;
+  }
+
+  private write16(address: number, data: number): void {
+    this.ram.write16(address, data);
   }
 
   private getRegister(ri: RegisterIdentifier): number {
