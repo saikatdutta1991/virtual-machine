@@ -1,5 +1,5 @@
 export enum RegisterIdentifier {
-  PC = 0x00,
+  IP = 0x00,
   ACC = 0x01,
 
   R1 = 0x02,
