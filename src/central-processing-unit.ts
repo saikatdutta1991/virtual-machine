@@ -1,5 +1,4 @@
-import { RAM_FIRST_ADDRESS } from './constants';
-import { InstructionCode } from './enums/instruction-code';
+import { Instructions } from './enums/instructions';
 import { RegisterIdentifier } from './enums/registers-identifier';
 import Memory16Bit from './memories/memory-16-bit';
 import RandomAccessMemory from './memories/random-access-memory';
@@ -14,7 +13,7 @@ export default class CentralProcessingUnit {
     this.ram = ram;
 
     this.registers = {
-      [RegisterIdentifier.PC]: new Memory16Bit(),
+      [RegisterIdentifier.IP]: new Memory16Bit(),
       [RegisterIdentifier.ACC]: new Memory16Bit(),
       [RegisterIdentifier.R1]: new Memory16Bit(),
       [RegisterIdentifier.R2]: new Memory16Bit(),
@@ -25,51 +24,44 @@ export default class CentralProcessingUnit {
       [RegisterIdentifier.R7]: new Memory16Bit(),
       [RegisterIdentifier.R8]: new Memory16Bit(),
     };
-
-    this.resetProgramCounter();
-  }
-
-  public resetProgramCounter() {
-    this.registers[RegisterIdentifier.PC].write(RAM_FIRST_ADDRESS);
   }
 
   public cycle() {
-    const instructioncode = this.fetchInstructionCode();
+    const opcode = this.fetch8();
 
-    switch (instructioncode) {
-      case InstructionCode.MOV:
-        const data = this.ram.read2Bytes(this.getNextAddress());
-        this.setNextAddress(2);
-        const register = this.getRegister(this.ram.read(this.getNextAddress()));
-        this.setNextAddress();
-        register.write(data);
-
-        break;
+    switch (opcode) {
+      case Instructions.MOV_LIT_REG: {
+        const value = this.fetch16();
+        const register = this.fetch8();
+        this.setRegister(register, value);
+        return;
+      }
 
       default:
-        throw new Error(`Invalid instructio code: ${toHex(instructioncode)}`);
+        throw new Error(`Invalid instructio code: ${toHex(opcode)}`);
     }
   }
 
-  private fetchInstructionCode(): InstructionCode {
-    const nextAddress = this.getNextAddress();
-    const instructioncode = this.ram.read(nextAddress);
-    this.setNextAddress();
-    return instructioncode;
+  private fetch8(): number {
+    const address = this.getRegister(RegisterIdentifier.IP);
+    const data = this.ram.read8(address);
+    this.setRegister(RegisterIdentifier.IP, address + 1);
+    return data;
   }
 
-  private getNextAddress(): number {
-    const register = this.getRegister(RegisterIdentifier.PC);
-    return register.read();
+  private fetch16(): number {
+    const address = this.getRegister(RegisterIdentifier.IP);
+    const data = this.ram.read16(address);
+    this.setRegister(RegisterIdentifier.IP, address + 2);
+    return data;
   }
 
-  private setNextAddress(byBytes: number = 1): void {
-    const register = this.getRegister(RegisterIdentifier.PC);
-    register.write(register.read() + byBytes);
+  private getRegister(ri: RegisterIdentifier): number {
+    return this.registers[ri].read16();
   }
 
-  private getRegister(ri: RegisterIdentifier): Memory16Bit {
-    return this.registers[ri];
+  private setRegister(ri: RegisterIdentifier, value: number): void {
+    return this.registers[ri].write16(value);
   }
 
   public debug() {

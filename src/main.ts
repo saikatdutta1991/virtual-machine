@@ -1,18 +1,18 @@
 import CentralProcessingUnit from './central-processing-unit';
-import { InstructionCode } from './enums/instruction-code';
+import { Instructions } from './enums/instructions';
 import { RegisterIdentifier } from './enums/registers-identifier';
 import RandomAccessMemory from './memories/random-access-memory';
 
 const ram = new RandomAccessMemory(64);
-ram.write(0x00, InstructionCode.MOV);
-ram.write(0x01, 0x12);
-ram.write(0x02, 0x34);
-ram.write(0x03, RegisterIdentifier.R1);
+ram.write8(0x00, Instructions.MOV_LIT_REG);
+ram.write8(0x01, 0x12);
+ram.write8(0x02, 0x34);
+ram.write8(0x03, RegisterIdentifier.R1);
 
-ram.write(0x04, InstructionCode.MOV);
-ram.write(0x05, 0xab);
-ram.write(0x06, 0xcd);
-ram.write(0x07, RegisterIdentifier.R2);
+ram.write8(0x04, Instructions.MOV_LIT_REG);
+ram.write8(0x05, 0xab);
+ram.write8(0x06, 0xcd);
+ram.write8(0x07, RegisterIdentifier.R2);
 
 const cpu = new CentralProcessingUnit(ram);
 cpu.cycle();
