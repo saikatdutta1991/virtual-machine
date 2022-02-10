@@ -4,15 +4,15 @@ import { RegisterIdentifier } from './enums/registers-identifier';
 import RandomAccessMemory from './memories/random-access-memory';
 
 const ram = new RandomAccessMemory(64);
-ram.write8(0x00, Instructions.MOV_LIT_REG);
-ram.write8(0x01, 0x12);
-ram.write8(0x02, 0x34);
-ram.write8(0x03, RegisterIdentifier.R1);
+ram.write8(0x0000, Instructions.MOV_LIT_REG);
+ram.write8(0x0001, 0x12);
+ram.write8(0x0002, 0x34);
+ram.write8(0x0003, RegisterIdentifier.R1);
 
-ram.write8(0x04, Instructions.MOV_REG_MEM);
-ram.write8(0x05, RegisterIdentifier.R1);
-ram.write8(0x06, 0x00);
-ram.write8(0x07, 0x10);
+ram.write8(0x0004, Instructions.MOV_REG_MEM);
+ram.write8(0x0005, RegisterIdentifier.R1);
+ram.write8(0x0006, 0x00);
+ram.write8(0x0007, 0x10);
 
 // ram.write8(0x04, Instructions.MOV_LIT_REG);
 // ram.write8(0x05, 0xab);
