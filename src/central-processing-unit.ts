@@ -63,7 +63,17 @@ export default class CentralProcessingUnit {
         const r2 = this.fetch8();
         const sum = this.getRegister(r1) + this.getRegister(r2);
         this.setRegister(Register.ACC, sum);
+        return;
+      }
 
+      case Instructions.JNE_LIT_MEM: {
+        const value = this.fetch16();
+        const accValue = this.getRegister(Register.ACC);
+        const address = this.fetch16();
+
+        if (value !== accValue) {
+          this.setRegister(Register.IP, address);
+        }
         return;
       }
 
