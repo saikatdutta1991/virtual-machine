@@ -78,7 +78,7 @@ export default class CentralProcessingUnit {
       }
 
       default:
-        throw new Error(`Invalid instructio code: ${toHex(opcode)}`);
+        throw new Error(`Invalid instruction code: ${toHex(opcode)}`);
     }
   }
 
