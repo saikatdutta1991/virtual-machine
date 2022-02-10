@@ -2,7 +2,6 @@ import { createMemory, toHex } from '../util';
 
 export default class RandomAccessMemory {
   protected readonly memory: DataView;
-  protected readonly hexPad: number = 2;
 
   constructor(sizeInBytes: number) {
     this.memory = createMemory(sizeInBytes);
@@ -26,13 +25,13 @@ export default class RandomAccessMemory {
 
     let output = '';
     for (let i = 0; i < this.memory.byteLength; ) {
-      output += `${toHex(i, this.hexPad)}:`;
+      output += `${toHex(i, 4)}:`;
       for (let j = 0; j < segmentLength; j++) {
         if (j === segmentHalf) {
           output += ' ';
         }
         if (i < this.memory.byteLength) {
-          output += ` ${toHex(this.read(i++), this.hexPad)}`;
+          output += ` ${toHex(this.read(i++), 2)}`;
         }
       }
       output += `\n`;
