@@ -51,6 +51,13 @@ export default class CentralProcessingUnit {
         return;
       }
 
+      case Instructions.MOV_MEM_REG: {
+        const value = this.fetch16();
+        const register = this.fetch8();
+        this.setRegister(register, value);
+        return;
+      }
+
       default:
         throw new Error(`Invalid instructio code: ${toHex(opcode)}`);
     }
