@@ -8,15 +8,15 @@ export default class Memory16Bit {
     this.memory = createMemory(2);
   }
 
-  public read(): number {
+  public read16(): number {
     return this.memory.getUint16(0);
   }
 
-  public write(data: number): void {
+  public write16(data: number): void {
     this.memory.setUint16(0, data);
   }
 
   public toString(): string {
-    return toHex(this.read(), this.hexPad);
+    return toHex(this.read16(), this.hexPad);
   }
 }

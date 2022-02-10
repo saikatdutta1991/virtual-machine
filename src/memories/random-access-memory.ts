@@ -7,16 +7,20 @@ export default class RandomAccessMemory {
     this.memory = createMemory(sizeInBytes);
   }
 
-  public read(address: number): number {
+  public read8(address: number): number {
     return this.memory.getUint8(address);
   }
 
-  public read2Bytes(address: number): number {
+  public read16(address: number): number {
     return this.memory.getUint16(address);
   }
 
-  public write(address: number, data: number): void {
+  public write8(address: number, data: number): void {
     this.memory.setUint8(address, data);
+  }
+
+  public write16(address: number, data: number): void {
+    this.memory.setUint16(address, data);
   }
 
   public toString(): string {
@@ -31,7 +35,7 @@ export default class RandomAccessMemory {
           output += ' ';
         }
         if (i < this.memory.byteLength) {
-          output += ` ${toHex(this.read(i++), 2)}`;
+          output += ` ${toHex(this.read8(i++), 2)}`;
         }
       }
       output += `\n`;
