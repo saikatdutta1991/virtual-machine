@@ -14,7 +14,12 @@ ram.write8(0x05, 0xab);
 ram.write8(0x06, 0xcd);
 ram.write8(0x07, RegisterIdentifier.R2);
 
+ram.write8(0x08, Instructions.MOV_REG_REG);
+ram.write8(0x09, RegisterIdentifier.R1);
+ram.write8(0x0a, RegisterIdentifier.R2);
+
 const cpu = new CentralProcessingUnit(ram);
+cpu.cycle();
 cpu.cycle();
 cpu.cycle();
 cpu.debugRam();
