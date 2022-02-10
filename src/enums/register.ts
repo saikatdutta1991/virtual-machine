@@ -1,4 +1,4 @@
-export enum RegisterIdentifier {
+export enum Register {
   IP = 0x00,
   ACC = 0x01,
 

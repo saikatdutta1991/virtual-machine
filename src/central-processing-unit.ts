@@ -1,5 +1,5 @@
 import { Instructions } from './enums/instructions';
-import { RegisterIdentifier } from './enums/registers-identifier';
+import { Register } from './enums/register';
 import Memory16Bit from './memories/memory-16-bit';
 import RandomAccessMemory from './memories/random-access-memory';
 import { toHex } from './util';
@@ -7,22 +7,22 @@ import { toHex } from './util';
 export default class CentralProcessingUnit {
   private ram: RandomAccessMemory;
 
-  private registers: { [identity in RegisterIdentifier]: Memory16Bit };
+  private registers: { [identity in Register]: Memory16Bit };
 
   constructor(ram: RandomAccessMemory) {
     this.ram = ram;
 
     this.registers = {
-      [RegisterIdentifier.IP]: new Memory16Bit(),
-      [RegisterIdentifier.ACC]: new Memory16Bit(),
-      [RegisterIdentifier.R1]: new Memory16Bit(),
-      [RegisterIdentifier.R2]: new Memory16Bit(),
-      [RegisterIdentifier.R3]: new Memory16Bit(),
-      [RegisterIdentifier.R4]: new Memory16Bit(),
-      [RegisterIdentifier.R5]: new Memory16Bit(),
-      [RegisterIdentifier.R6]: new Memory16Bit(),
-      [RegisterIdentifier.R7]: new Memory16Bit(),
-      [RegisterIdentifier.R8]: new Memory16Bit(),
+      [Register.IP]: new Memory16Bit(),
+      [Register.ACC]: new Memory16Bit(),
+      [Register.R1]: new Memory16Bit(),
+      [Register.R2]: new Memory16Bit(),
+      [Register.R3]: new Memory16Bit(),
+      [Register.R4]: new Memory16Bit(),
+      [Register.R5]: new Memory16Bit(),
+      [Register.R6]: new Memory16Bit(),
+      [Register.R7]: new Memory16Bit(),
+      [Register.R8]: new Memory16Bit(),
     };
   }
 
@@ -58,22 +58,31 @@ export default class CentralProcessingUnit {
         return;
       }
 
+      case Instructions.ADD_REG_REG: {
+        const r1 = this.fetch8();
+        const r2 = this.fetch8();
+        const sum = this.getRegister(r1) + this.getRegister(r2);
+        this.setRegister(Register.ACC, sum);
+
+        return;
+      }
+
       default:
         throw new Error(`Invalid instructio code: ${toHex(opcode)}`);
     }
   }
 
   private fetch8(): number {
-    const address = this.getRegister(RegisterIdentifier.IP);
+    const address = this.getRegister(Register.IP);
     const data = this.ram.read8(address);
-    this.setRegister(RegisterIdentifier.IP, address + 1);
+    this.setRegister(Register.IP, address + 1);
     return data;
   }
 
   private fetch16(): number {
-    const address = this.getRegister(RegisterIdentifier.IP);
+    const address = this.getRegister(Register.IP);
     const data = this.ram.read16(address);
-    this.setRegister(RegisterIdentifier.IP, address + 2);
+    this.setRegister(Register.IP, address + 2);
     return data;
   }
 
@@ -81,11 +90,11 @@ export default class CentralProcessingUnit {
     this.ram.write16(address, data);
   }
 
-  private getRegister(ri: RegisterIdentifier): number {
+  private getRegister(ri: Register): number {
     return this.registers[ri].read16();
   }
 
-  private setRegister(ri: RegisterIdentifier, value: number): void {
+  private setRegister(ri: Register, value: number): void {
     return this.registers[ri].write16(value);
   }
 
